@@ -1,7 +1,8 @@
 """Week 0 smoke test: random policy on constrained cart-pole, logged to W&B."""
 import yaml
-import wandb
 from safe_control_gym.utils.registration import make
+
+import wandb
 
 N_EPISODES = 5
 CONFIG_PATH = "configs/cartpole_stab.yaml"
@@ -15,11 +16,11 @@ def main():
 
     env = make("cartpole", **task_config)
     for ep in range(N_EPISODES):
-        obs, info = env.reset()
+        _obs, info = env.reset()
         done, ret, violations, steps = False, 0.0, 0, 0
         while not done:
             action = env.action_space.sample()
-            obs, reward, done, info = env.step(action)
+            _obs, reward, done, info = env.step(action)
             ret += reward
             violations += int(bool(info.get("constraint_violation", 0)))
             steps += 1
