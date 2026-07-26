@@ -4,4 +4,5 @@ wandb/
 runs/
 results/
 *.pt
-.venv/
+.venv/models/
+runs/
