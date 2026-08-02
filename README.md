@@ -38,8 +38,10 @@ and the CBF condition is now given by
 
 **Two one-sided barriers, instead of one symmetric barrier.** The barrier function $h$ must now be defined. Since our objective is to keep the pole angle, $\theta$, within $\pm 9$ degrees ($0.16$ rad) of the vertical position, a candidate symmetric barrier could be defined as $h(\theta) = \theta_{\max}^2 - \theta^2$, with $\theta_{max} = 0.16$. However, it was empirically found that this is a poor barrier choice for the following reasons. At every time step, we wish to enforce the condition $\dot \psi(x,u) + \gamma_2 \psi(x) \geq 0$ by determining a suitable control $u$. But the symmetric choice of $h$ implies that the input appears in this condition through a term of the form $-2 \theta \ddot \theta$, which vanishes at $\theta = 0$. Hence, satisfying the CBF condition around the vertical position requires very large, often disruptive forces. This issue was resolved by instead defining *box constraints* (see, e.g., [4]), that is, by using two one-sided barriers of the form
 ```math
-h_1 = \theta_{\max} - \theta, \\
-h_2 = \theta_{\max} + \theta.
+\begin{aligned}
+h_1 &= \theta_{\max} - \theta, \\
+h_2 &= \theta_{\max} + \theta
+\end{aligned}
 ```
 The gradient of each of these functions with respect to $\theta$ is constant ($\pm 1$), preventing the observed problem. Now, each of these functions yields a separate CBF condition, and both are used as separate constraints in the following optimization problem.
 
