@@ -65,6 +65,8 @@ Our gain sweep, hence, led to a U-shape behavior, where the number of violations
 
 - **Evaluation starts inside the safe set.** An important theoretical characteristic of CBFs is the fact that they guarantee forward invariance of the safety set. This means that the designed filter will maintain the pole within the desired region as long as its initial condition is already inside it. If the states of the system start out of the safety set, there is no guarantee for the pole to recover the vertical position. For this reason, the initial state distribution had to be narrowed such that the (random) initial states do not start out of the desired boundaries.
 
+- **Lack of robustness against model uncertainties.** The designed filter exploits the exact symbolic dynamics model of the cart-pole system taken from safe-control-gym. In most practical applications exact model knowledge is unavailable, leading to potential safety-critical inaccuracies in the resulting controller. A planned extension is to model the unmodeled dynamics using Gaussian processes, yielding an uncertainty-aware version of the filter that stays conservative where the model is less trustworthy. 
+
 ## Reproduce
 
 ```bash
@@ -72,7 +74,7 @@ Our gain sweep, hence, led to a U-shape behavior, where the number of violations
 git clone https://github.com/utiasDSL/safe-control-gym.git
 cd safe-control-gym && pip install -e . && cd ..
 
-git clone https://github.com/<your-username>/safe-rl-cbf.git
+git clone https://github.com/vglopez/safe-rl-cbf.git
 cd safe-rl-cbf
 pip install -e ".[dev]"
 
