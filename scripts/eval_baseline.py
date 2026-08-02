@@ -1,7 +1,7 @@
 """Week 1: evaluate the trained PPO baseline against the safety constraint."""
 from stable_baselines3 import PPO
-import wandb
 
+import wandb
 from safe_rl_cbf.envs import SafeCartpoleEnv
 
 N_EPISODES = 20

@@ -1,7 +1,8 @@
 """Week 0 smoke test: random policy on constrained cart-pole, logged to W&B."""
-import wandb
 import yaml
 from safe_control_gym.utils.registration import make
+
+import wandb
 
 N_EPISODES = 5
 CONFIG_PATH = "configs/cartpole_stab.yaml"

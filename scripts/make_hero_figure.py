@@ -1,5 +1,6 @@
 """Week 3: two-panel hero figure — theta trajectories, baseline vs. HOCBF."""
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np

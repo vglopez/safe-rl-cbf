@@ -1,5 +1,6 @@
 """Week 2, Task 1: inspect safe-control-gym's symbolic model interface."""
 import casadi as cs
+
 from safe_rl_cbf.envs import SafeCartpoleEnv
 
 env = SafeCartpoleEnv()

@@ -1,6 +1,7 @@
 """Find an init distribution: inside the safe set at reset, but hard enough
 that unfiltered PPO still violates."""
 import copy
+
 import numpy as np
 import yaml
 from safe_control_gym.utils.registration import make

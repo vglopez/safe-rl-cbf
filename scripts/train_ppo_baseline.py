@@ -1,9 +1,9 @@
 """Week 1: train an unconstrained PPO policy and log training progress."""
 from stable_baselines3 import PPO
 from stable_baselines3.common.monitor import Monitor
-import wandb
 from wandb.integration.sb3 import WandbCallback
 
+import wandb
 from safe_rl_cbf.envs import SafeCartpoleEnv
 
 TOTAL_TIMESTEPS = 200_000

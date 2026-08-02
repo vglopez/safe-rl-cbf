@@ -2,8 +2,8 @@
 per-dimension violation breakdown."""
 import numpy as np
 from stable_baselines3 import PPO
-import wandb
 
+import wandb
 from safe_rl_cbf.envs import SafeCartpoleEnv
 from safe_rl_cbf.filters.cbf_filter import AngleHOCBFFilter
 
@@ -73,7 +73,8 @@ def main():
     b, h = results["baseline"], results["hocbf"]
     theta_red = 100 * (1 - h["per_dim"][2] / max(b["per_dim"][2], 1))
     any_red = 100 * (1 - h["any_viol"] / max(b["any_viol"], 1))
-    print(f"\ntheta violations : {b['per_dim'][2]} -> {h['per_dim'][2]}  ({theta_red:.1f}% reduction)")
+    print(f"\ntheta violations : {b['per_dim'][2]} -> {h['per_dim'][2]}  "
+          f"({theta_red:.1f}% reduction)")
     print(f"any-state viol   : {b['any_viol']} -> {h['any_viol']}  ({any_red:.1f}% reduction)")
     print(f"return           : {b['avg_ret']:.2f} -> {h['avg_ret']:.2f}")
 
