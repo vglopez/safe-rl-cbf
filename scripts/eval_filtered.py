@@ -1,8 +1,8 @@
 """Week 2, Task 3 (fixed): evaluate PPO + HOCBF filter in physical action units."""
 import numpy as np
+import wandb
 from stable_baselines3 import PPO
 
-import wandb
 from safe_rl_cbf.envs import SafeCartpoleEnv
 from safe_rl_cbf.filters.cbf_filter import AngleHOCBFFilter
 

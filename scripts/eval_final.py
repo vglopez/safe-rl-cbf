@@ -1,9 +1,9 @@
 """Week 2 final evaluation: baseline vs. HOCBF filter (gamma=20), with
 per-dimension violation breakdown."""
 import numpy as np
+import wandb
 from stable_baselines3 import PPO
 
-import wandb
 from safe_rl_cbf.envs import SafeCartpoleEnv
 from safe_rl_cbf.filters.cbf_filter import AngleHOCBFFilter
 
