@@ -28,29 +28,29 @@ A safe RL controller is designed for a cart-pole application. First, a PPO polic
 ## Method
 
 **Control barrier function (CBF) design.** In safety-critical applications, it is desired that the state of a dynamical system remains within predefined safety boundaries. Control barrier functions [1] are mathematical expressions that evaluate how close is the system from leaving such safe regions. In many applications, a CBF is often defined as a function $h(x)$ such that $h(x) \geq 0$ if and only if $x$ is in the safe set, together with the requirement that at every safe $x$ there exists an admissible input $u$ such that $\dot h(x,u) + \gamma h \geq 0$ . However, these standard CBFs are only applicable to systems with relative degree 1 [2]. The cart-pole system that is of interest in this project has relative degree 2 with respect to the angular position $\theta$: the control input does not appear in $\theta$ or $\dot \theta$, but only in $\ddot \theta$ [3]. Hence, a high-order CBF (HOCBF) [2] is used instead. In this case, a function $h$ is still defined, but additionally an auxiliary barrier is defined as
-$$
+```math
 \psi (x) = \dot h(x) + \gamma_1 h(x),
-$$
+```
 and the CBF condition is now given by
-$$
+```math
 \dot \psi(x,u) + \gamma_2 \psi(x) \geq 0.
-$$
+```
 
 **Two one-sided barriers, instead of one symmetric barrier.** The barrier function $h$ must now be defined. Since our objective is to keep the pole angle, $\theta$, within $\pm 9$ degrees ($0.16$ rad) of the vertical position, a candidate symmetric barrier could be defined as $h(\theta) = \theta_{\max}^2 - \theta^2$, with $\theta_{max} = 0.16$. However, it was empirically found that this is a poor barrier choice for the following reasons. At every time step, we wish to enforce the condition $\dot \psi(x,u) + \gamma_2 \psi(x) \geq 0$ by determining a suitable control $u$. But the symmetric choice of $h$ implies that the input appears in this condition through a term of the form $-2 \theta \ddot \theta$, which vanishes at $\theta = 0$. Hence, satisfying the CBF condition around the vertical position requires very large, often disruptive forces. This issue was resolved by instead defining *box constraints* (see, e.g., [4]), that is, by using two one-sided barriers of the form
-$$
+```math
 h_1 = \theta_{\max} - \theta, \\
 h_2 = \theta_{\max} + \theta.
-$$
+```
 The gradient of each of these functions with respect to $\theta$ is constant ($\pm 1$), preventing the observed problem. Now, each of these functions yields a separate CBF condition, and both are used as separate constraints in the following optimization problem.
 
 **QP formulation.** At each time step, an optimization problem is solved to make sure that the PPO policy will maintain the system states within the safe region. If this is not the case, the nominal input is suitably modified. This optimization problem is formulated as the following quadratic program (QP)
-$$
+```math
 \begin{aligned}
 \min_{u,\,\sigma} \quad & \|u - u_{\text{nominal}}\|^2 + \rho\|\sigma\|^2 \\
 \text{s.t.} \quad & \dot\psi_i(x, u) + \gamma_2 \psi_i(x) + \sigma_i \geq 0, \quad i = 1, 2 \\
 & \sigma \geq 0, \quad u_{\min} \leq u \leq u_{\max}
 \end{aligned}
-$$
+```
 where $\psi_i = \dot h_i + \gamma_1 h_i$ and $\sigma$ is a slack variable. This QP is solved via CasADi's symbolic `Opti('conic')` interface with qpOASES.
 
 **Gain selection.** The gains $\gamma_1$ and $\gamma_2$ of the filter where tuned to obtain the best possible behavior in the proposed scheme. This tuning was performed empirically, by carrying out a sweep among the values of a small grid, then selecting the gains that yielded fewer violations and higher performance. During these sweeps, it was noted that smaller gains often lead to a higher number of violations. This can be explained as follows: small gains let the state drift too close to the safe boundary before a meaningful corrective step is taken. When the system is already close to the boundary, control inputs of large magnitude are necessary in an attempt to recover the vertical position. This approach often turns out to be counterproductive. In contrast, large gains allow the filter to act promptly, before the use of aggressive forces is required.
